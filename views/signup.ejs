@@ -1,0 +1,52 @@
+<html>
+<body>
+
+<h1>Sign up Page</h1>
+<form id="signupForm">
+<label for="username">User name:</label>
+<input type="text" id="username" name="username">
+<label for="password">Password</label>
+<input type="password" id="password" name="password">
+<label for="retypePassword">Retype password</label>
+<input type="password" id="retypePassword" name="retypePassword">
+<input type="submit" value="Sign up">
+</form>
+
+<script>
+    var signupForm = document.getElementById("signupForm");
+    var password=document.getElementById("password")
+    var retypedPassword=document.getElementById("retypePassword")
+    signupForm.addEventListener("submit",async function(event){
+        event.preventDefault();
+        if (password.value!=retypedPassword.value){
+            alert("password does not match")
+            return
+        }
+        const userData={
+            username:document.getElementById("username").value,
+            password:password.value
+        }
+        console.log("THUS AD",userData)
+        try{
+            const response=await fetch("/signup",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(userData)
+                });
+                if (response.ok) {
+                    alert("User signed up successfully!");
+                } else {
+                    alert("There was an issue signing up.");
+                }
+            } catch(error){
+                console.error("Error during sign up:", error);
+            }
+            })
+    
+    
+    </script>
+
+</body>
+</html>
