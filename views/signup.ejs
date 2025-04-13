@@ -14,6 +14,7 @@
 
 <script>
     var signupForm = document.getElementById("signupForm");
+    var username=document.getElementById("username")
     var password=document.getElementById("password")
     var retypedPassword=document.getElementById("retypePassword")
     signupForm.addEventListener("submit",async function(event){
@@ -23,10 +24,9 @@
             return
         }
         const userData={
-            username:document.getElementById("username").value,
+            username:username.value,
             password:password.value
         }
-        console.log("THUS AD",userData)
         try{
             const response=await fetch("/signup",{
                 method:"POST",
