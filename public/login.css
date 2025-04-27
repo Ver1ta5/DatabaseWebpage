@@ -1,0 +1,8 @@
+label {
+    display: inline-block;
+    width: 1000px; /* Or how ever big a gap you want */
+  }
+
+body {
+    background-color: lightblue;
+}

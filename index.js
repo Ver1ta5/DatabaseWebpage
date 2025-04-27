@@ -11,7 +11,7 @@ const bcrypt=require('bcrypt');
 const saltRounds = 10
 const { db,addUserToDb,connectToDb } = require("./db");
 const { error } = require("console");
-
+app.use(express.static('public'))
 
 app.use(express.urlencoded({ extended: true }));
 (async () => {
@@ -76,7 +76,7 @@ app.post("/login/password", (req, res, next) => {
         return res.status(500).send({ message: "Login error." });
       }
       console.log("Login successful:", user);
-      return res.redirect('/main');
+      return res.redirect('/home');
     });
   })(req, res, next);
 });
@@ -91,12 +91,16 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Route to render the login page
-app.get("/", (req, res) => {
-  res.render("main"); // 'main' refers to main.ejs
+app.get("/login", (req, res) => {
+  res.render("login"); // 'login' refers to login.ejs
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup"); // 'main' refers to main.ejs
+  res.render("signup"); // 'login' refers to login.ejs
+});
+
+app.get("/home", (req, res) => {
+  res.render("home"); // 'login' refers to login.ejs
 });
 
 app.listen(port, () => {
