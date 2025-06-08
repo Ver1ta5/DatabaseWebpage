@@ -2,24 +2,39 @@
 <html>
 <head>
   <title><%= category %> News</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
-  <h1>Category: <%= category %></h1>
-  <div id="newsList"></div>
+  <h1>News Category: <%= category %></h1>
+  <div id="app">
+    <ul>
+      <li v-for="headline in headlines" :key="headline">
+        <div id="newsBox">
+      <a :href="headline.link">{{headline.headline}}</a>
+        </div>
+      </li>
+    <ul>
+  </div>
 
-  <script>
-    const category = "<%= category %>";
+    <script>
+    const { createApp } = Vue;
 
-    fetch(`/news?category=${encodeURIComponent(category)}`)
-      .then(res => res.json())
-      .then(data => {
-        const newsList = document.getElementById("newsList");
-        data.forEach(item => {
-          const div = document.createElement("div");
-          div.textContent = item.title; // or whatever field you want
-          newsList.appendChild(div);
-        });
-      });
+    createApp({
+      data() {
+        return {
+          headlines: []
+        };
+      },
+      mounted() {
+        const category = "<%= category %>";
+        fetch(`/news?category=${encodeURIComponent(category)}`)
+          .then(res => res.json())
+          .then(data => {
+            this.headlines = data;
+          })
+          .catch(err => console.error(err));
+      }
+    }).mount('#app');
   </script>
 </body>
 </html>

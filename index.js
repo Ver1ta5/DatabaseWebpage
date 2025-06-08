@@ -102,7 +102,7 @@ app.get("/signup", (req, res) => {
 
 app.get("/categories", async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDb();
     const collections = await db.listCollections().toArray();
     console.log("Collections:", collections.map(c => c.name));
 
@@ -126,5 +126,23 @@ app.listen(port, () => {
 
 app.get('/category', (req, res) => {
   const category = req.query.category;
-  res.render('category', { category }); // renders views/category.ejs
+  res.render('category', { category }); 
+});
+
+app.get('/news', async (req, res) => {
+  const category = req.query.category;
+   console.log('Requested category:', category);
+  try {
+    const db = await getDb();
+    const data = await db.collection('NewsCollection')
+    .find({ category: { $regex: `^${category}$`, $options: 'i' } }) // case-insensitive match
+    .project({ headline: 1, _id: 0,link:1 })
+    .toArray();
+    console.log('News data:', data); // Debug log
+
+    res.json(data);
+  } catch (e) {
+    console.error('Error fetching news:', e);
+    res.status(500).send("Error fetching news");
+  }
 });
