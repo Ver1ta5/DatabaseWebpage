@@ -1,0 +1,99 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/login.css">
+    </head>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<body>
+
+<h1>Sign up Page</h1>
+<form @submit.prevent="validateInfo" action="/signupForm/login"  method="POST" id="signupForm">
+<div id="app">
+<label for="username">User name:</label>
+<input type="text" id="username" name="username" v-model="username">
+<p v-if="!usernameValid">Only letters and numbers are allowed for username</p>
+<br>
+<label for="password">Password</label>
+<input type="password" id="password" name="password" v-model="password">
+<p v-if="!passwordValid">Password must have a length of 8 character and 1 uppercase and lowercase letter,a special character and a number </p>
+<br>
+<br>
+<label for="retypePassword">Retype password</label>
+<input type="password" id="retypePassword" name="retypePassword">
+<br>
+<br>
+<input type="submit" value="Sign up" :disabled="!usernameValid || !passwordValid">
+</div>
+</form>
+
+<script>
+    var signupForm = document.getElementById("signupForm");
+    var username=document.getElementById("username")
+    var password=document.getElementById("password")
+    var retypedPassword=document.getElementById("retypePassword")
+    signupForm.addEventListener("submit",async function(event){
+        event.preventDefault();
+        if (password.value!=retypedPassword.value){
+            alert("password does not match")
+            return
+        }
+        const userData={
+            username:username.value,
+            password:password.value
+        }
+        try{
+            const response=await fetch("/signup",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(userData)
+                });
+                if (response.ok) {
+                    alert("User signed up successfully!");
+                } else {
+                    alert("There was an issue signing up.");
+                }
+            } catch(error){
+                console.error("Error during sign up:", error);
+            }
+            })
+    
+
+    
+    const app = Vue.createApp({
+      data() {
+        return {
+          username: "",
+          password: "",
+        
+        };
+    },
+        computed:{
+            usernameValid(){
+                return this.username.length>0 && /^[A-Za-z0-9]+$/.test(this.username)
+            },
+            passwordValid(){
+            return /^(?=(.*[A-Z]){1,})(?=(.*[a-z]){1,})(?=(.*[0-9]){1,})(?=.*\W).{8,}$/.test(this.password)
+            }
+            
+        },
+        methods:{
+            validateInfo(){
+                if (this.usernameValid){
+                    alert("Info submitted")
+                }else{
+                    alert("invalid charactered entered")
+                }
+            }
+        }
+      });  
+   app.mount('#app')
+    
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<link rel="stylesheet" href="/login.css">
+</head>
+
+<body>
+<div id="app">
+<form @submit.prevent="validateInfo" action="/login/password"  method="POST" id="loginForm">
+<label for="username">User name:</label>
+<input type="text" id="username" name="username" v-model="username">
+<p v-if="!usernameValid">Only letters and numbers are allowed</p>
+<br>
+<br>
+<label for="password" style="padding: 4px;">Password:</label>
+
+
+<input type="password" id="password" name="password" v-model="password">
+<br>
+<br>
+<input type="submit" value="Login"  :disabled="!usernameValid">
+</form>
+<a href="signup">Signup</a>
+</div>
+
+
+<script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          username: "",
+          password: "",
+        
+        };
+    },
+        computed:{
+            usernameValid(){
+                return this.username.length>0 && /^[A-Za-z0-9]+$/.test(this.username)
+            },
+            
+        },
+        methods:{
+            validateInfo(){
+                if (this.usernameValid){
+                    alert("Info submitted")
+                }else{
+                    alert("invalid charactered entered")
+                }
+            }
+        }
+      });  
+   app.mount('#app')
+  
+  </script>
+
+</body>
+</html>
